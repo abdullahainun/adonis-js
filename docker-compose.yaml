@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+  backend:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile
+    image: adonis-js-backend
+    container_name: adonis-js-backend
+    restart: unless-stopped
+    volumes:
+      - ./src/backend:/usr/src/backend
+    ports:
+      - "1333:3333"
+
+  frontend:
+    build:
+      context: ./src/frontend
+      dockerfile: Dockerfile
+    image: adonis-js-frontend
+    container_name: adonis-js-frontend
+    restart: unless-stopped
+    volumes:
+      - ./src/frontend:/usr/src/frontend
+    ports:
+      - "2333:3333"
+
+  # db:
+  #   image: mysql:5.7
+  #   container_name: travellist-db
+  #   restart: unless-stopped
+  #   environment:
+  #     MYSQL_DATABASE: ${DB_DATABASE}
+  #     MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+  #     MYSQL_PASSWORD: ${DB_PASSWORD}
+  #     MYSQL_USER: ${DB_USERNAME}
+  #     SERVICE_TAGS: dev
+  #     SERVICE_NAME: mysql
+  #   volumes:
+  #     - ./.docker/mysql:/docker-entrypoint-initdb.d
+  #   networks:
+  #     - adonis-js
+
+  nginx:
+    image: nginx:alpine
+    container_name: adonis-js-nginx
+    restart: unless-stopped
+    ports:
+      - 8001:80
+    volumes:
+      - ./.docker/nginx:/etc/nginx/conf.d/      
